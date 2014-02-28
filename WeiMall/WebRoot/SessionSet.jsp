@@ -27,6 +27,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
   </head> 
   
+  	<script type="text/javascript">
+  
     <% 
 	String referer = "";
 	String test = "";
@@ -43,23 +45,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  		SellerDAO dao = new SellerDAO();
 		  		Seller seller = dao.findById(intId);
 		  		
-		  		Date oldTime = null;
-		  		Date newTime = new Date();
-		  		System.out.println("Time:");
-		  		String temp = seller.getSellerLastLoginTime();
-		  		if(temp != null) {
-		  			oldTime = new Date(temp);		
-			  		if(newTime.getYear() == oldTime.getYear() &&
-			  			newTime.getMonth() == oldTime.getMonth() && 
-			  			newTime.getDate() == oldTime.getDate()) {
-			  			newTime = oldTime;
-			  		}
-			  		session.setAttribute("WeiMallTime", oldTime.toLocaleString());
-		   			System.out.println("oldTime: " + oldTime.toLocaleString());
-			  	} else {
-			  		session.setAttribute("WeiMallTime", null);
-			  	}
-		   		System.out.println("newTime: " + newTime.toLocaleString());
+		  		session.setAttribute("WeiMallIp", seller.getSellerLastLoginIp());
 		  		
 		  		String userIp;
 		  		if (request.getHeader("x-forwarded-for") == null) {   
@@ -67,14 +53,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				} else {
 					userIp = request.getHeader("x-forwarded-for");   
 				}
-		   		System.out.println("ip: " + userIp);
-		   	
-		   		System.out.println("String:" + newTime.toString());
-		  		session.setAttribute("WeiMallIp", seller.getSellerLastLoginIp());
-		  		
-		  		System.out.println("time: " + newTime.toString() + " ip: " + userIp);
-		  		
-		  		//Database.setLoginTimeAndIP(intId, newTime.toString(), userIp);
+				seller.setSellerLastLoginIp(userIp);
+				
+				String oldTimeString = seller.getSellerLastLoginTime();
+				session.setAttribute("WeiMallTime", oldTimeString);
+				System.out.println("oldTime1:" + oldTimeString);
+				if(oldTimeString == null) {
+				System.out.println("oldTime:null");
+				%>
+				console.log("nulltime, oldTime:" + new Date().toString());
+				var id = <%=userId%>;
+				console.log("id:" + id);
+				//Database.setLoginTime(0, "Sat Mar 01 2014 00:25:03 GMT+0800 (CST)");
+				Database.setLoginTime(id, new Date().toString());
+				<%} else { System.out.println("oldTime2:" + oldTimeString);%>
+				var oldTime = new Date("<%=oldTimeString%>");
+				var newTime = new Date();
+				console.log("oldTime:" + oldTime.toLocaleDateString());
+				console.log("newTime:" + newTime.toLocaleDateString());
+				if(oldTime.toLocaleDateString() != newTime.toLocaleDateString())
+					//console.log(newTime.toString());
+					var id = <%=userId%>;
+					console.log("id:" + id);
+					//Database.setLoginTime(0, "Sat Mar 01 2015 00:25:03 GMT+0800 (CST)");
+					Database.setLoginTime(id, newTime.toString());
+				<%}
+				dao.save(seller);
 		  		response.sendRedirect("User.jsp");
 		  	} else {
 		  		response.sendRedirect("index.jsp");
@@ -88,6 +92,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	}
 	%>
   
+  	</script>
+  	
   <body>
   	<%=session.getAttribute("WeiMallId") %>
   </body>

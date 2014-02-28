@@ -32,7 +32,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						if(sellerLastLoginTime != null) { %>
 					<div class="row">
 						<div class="nopadding col-sm-2">上次登录时间</div>
-						<div class="col-sm-3"><%=sellerLastLoginTime%></div>
+						<div class="col-sm-3" id="lastLoginTime">
+						</div>
+						<script>
+						var date = new Date("<%=sellerLastLoginTime%>");
+						$('#lastLoginTime').html(date.toLocaleString());
+						</script>
 					</div>
 					<%} %>
 					<%	String sellerLastLoginIp = (String)session.getAttribute("WeiMallIp");

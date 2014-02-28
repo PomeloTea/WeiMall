@@ -115,16 +115,19 @@ public class Database {
 		//ret=0 卖家不存在
 		//ret=1保存成功
 		System.out.println("setLoginTime");
+		System.out.println(SellerId);
+		System.out.println(LoginTime);
 		int ret;
 		SellerDAO sellerDao = new SellerDAO();
 		Seller seller = sellerDao.findById(SellerId);
 		if (seller == null) ret=0;
 		else{
+			System.out.println(LoginTime);
 			seller.setSellerLastLoginTime(LoginTime);
 			sellerDao.save(seller);
 			ret = 1;
 		}
-		System.out.println(ret);
+		System.out.println("ret:" + ret);
 		return ret;
 	}
 
@@ -160,5 +163,6 @@ public class Database {
 	
 	public static void main(String[] args){ 
 		saveSellerInfo(0,"你好",1,"19930527","304144421","+8615601717257");
+		setLoginTime(0, "Sat Mar 01 2014 00:56:57 GMT+0800 (CST)");
 	}
 }
