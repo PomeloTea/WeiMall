@@ -33,7 +33,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	String referer = "";
 	String test = "";
 	referer = request.getHeader("REFERER");
-	out.println(referer);
+	//out.println(referer);
 	if(referer == null) {
 		response.sendRedirect("index.jsp");
 	} else {
@@ -45,6 +45,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  		SellerDAO dao = new SellerDAO();
 		  		Seller seller = dao.findById(intId);
 		  		
+		  		if(seller == null) {
+		  			System.out.println("id: " + intId);
+		  			System.out.println("seller: null");
+		  			return;
+		  		}
+		  		
+		  		System.out.println("session ip:" + seller.getSellerLastLoginIp());
 		  		session.setAttribute("WeiMallIp", seller.getSellerLastLoginIp());
 		  		
 		  		String userIp;
@@ -54,32 +61,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					userIp = request.getHeader("x-forwarded-for");   
 				}
 				seller.setSellerLastLoginIp(userIp);
+				//System.out.println("ip: " + userIp);
+				dao.save(seller);
 				
 				String oldTimeString = seller.getSellerLastLoginTime();
 				session.setAttribute("WeiMallTime", oldTimeString);
-				System.out.println("oldTime1:" + oldTimeString);
+				System.out.println("oldTime:" + oldTimeString);
 				if(oldTimeString == null) {
-				System.out.println("oldTime:null");
 				%>
-				console.log("nulltime, oldTime:" + new Date().toString());
-				var id = <%=userId%>;
-				console.log("id:" + id);
-				//Database.setLoginTime(0, "Sat Mar 01 2014 00:25:03 GMT+0800 (CST)");
-				Database.setLoginTime(id, new Date().toString());
-				<%} else { System.out.println("oldTime2:" + oldTimeString);%>
+				console.log("newTime:" + new Date().toString());
+				Database.setLoginTime(<%=userId%>, new Date().toString(), function(){
+				<%//response.sendRedirect("User.jsp");%>
+				});
+				<%} else { %>
 				var oldTime = new Date("<%=oldTimeString%>");
 				var newTime = new Date();
-				console.log("oldTime:" + oldTime.toLocaleDateString());
-				console.log("newTime:" + newTime.toLocaleDateString());
+				console.log("oldDate:" + oldTime.toLocaleDateString());
+				console.log("newDate:" + newTime.toLocaleDateString());
 				if(oldTime.toLocaleDateString() != newTime.toLocaleDateString())
 					//console.log(newTime.toString());
-					var id = <%=userId%>;
-					console.log("id:" + id);
+					//console.log("id:" + id);
 					//Database.setLoginTime(0, "Sat Mar 01 2015 00:25:03 GMT+0800 (CST)");
-					Database.setLoginTime(id, newTime.toString());
+					Database.setLoginTime(<%=userId%>, newTime.toString(), function(){
+				<%//response.sendRedirect("User.jsp");%>
+				});
 				<%}
-				dao.save(seller);
-		  		response.sendRedirect("User.jsp");
+		  		//response.sendRedirect("User.jsp");
 		  	} else {
 		  		response.sendRedirect("index.jsp");
 		  	}

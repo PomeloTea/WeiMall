@@ -13,6 +13,10 @@
 	   		userId = Integer.parseInt(StrId);
 			SellerDAO dao = new SellerDAO();
 			seller = dao.findById(userId);
+			if(seller == null) {
+				System.out.println("id: " + userId + ", seller:null");
+				return;
+			}
 	   	}%>
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">

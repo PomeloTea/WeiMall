@@ -115,14 +115,14 @@ public class Database {
 		//ret=0 卖家不存在
 		//ret=1保存成功
 		System.out.println("setLoginTime");
-		System.out.println(SellerId);
-		System.out.println(LoginTime);
+		//System.out.println(SellerId);
+		//System.out.println(LoginTime);
 		int ret;
 		SellerDAO sellerDao = new SellerDAO();
 		Seller seller = sellerDao.findById(SellerId);
 		if (seller == null) ret=0;
 		else{
-			System.out.println(LoginTime);
+			//System.out.println(LoginTime);
 			seller.setSellerLastLoginTime(LoginTime);
 			sellerDao.save(seller);
 			ret = 1;
