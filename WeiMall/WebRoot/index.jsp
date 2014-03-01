@@ -6,6 +6,11 @@
   	<%@ include file="head.jsp"%>
     <script type="text/javascript" src="js/index.js"></script> 
 	<%
+	
+	session.setAttribute("WeiMallId", null);
+	session.setAttribute("WeiMallTime", null);
+	session.setAttribute("WeiMallIp", null);
+	
 	String temp = (String)session.getAttribute("WeiMallId");
 	if(temp != null) {
 		response.sendRedirect("User.jsp");

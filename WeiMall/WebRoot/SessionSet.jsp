@@ -43,6 +43,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		  		session.setAttribute("WeiMallId", userId);
 		  		int intId = Integer.parseInt(userId);
 		  		SellerDAO dao = new SellerDAO();
+		  		dao.getSession().flush();
 		  		Seller seller = dao.findById(intId);
 		  		
 		  		if(seller == null) {
@@ -71,7 +72,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				%>
 				console.log("newTime:" + new Date().toString());
 				Database.setLoginTime(<%=userId%>, new Date().toString(), function(){
-				<%//response.sendRedirect("User.jsp");%>
+				<%response.sendRedirect("User.jsp");%>
 				});
 				<%} else { %>
 				var oldTime = new Date("<%=oldTimeString%>");
@@ -79,11 +80,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				console.log("oldDate:" + oldTime.toLocaleDateString());
 				console.log("newDate:" + newTime.toLocaleDateString());
 				if(oldTime.toLocaleDateString() != newTime.toLocaleDateString())
-					//console.log(newTime.toString());
-					//console.log("id:" + id);
-					//Database.setLoginTime(0, "Sat Mar 01 2015 00:25:03 GMT+0800 (CST)");
 					Database.setLoginTime(<%=userId%>, newTime.toString(), function(){
-				<%//response.sendRedirect("User.jsp");%>
+				<%response.sendRedirect("User.jsp");%>
 				});
 				<%}
 		  		//response.sendRedirect("User.jsp");

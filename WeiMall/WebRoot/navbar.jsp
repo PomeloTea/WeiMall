@@ -12,6 +12,7 @@
 	   	} else {
 	   		userId = Integer.parseInt(StrId);
 			SellerDAO dao = new SellerDAO();
+			dao.getSession().flush();
 			seller = dao.findById(userId);
 			if(seller == null) {
 				System.out.println("id: " + userId + ", seller:null");
