@@ -16,7 +16,7 @@ create table seller
 	seller_birthday			 varchar(20),
 	seller_qq				 varchar(20),
 	seller_phone_num 		 varchar(20),
-	seller_last_login_time	 varchar(20),
+	seller_last_login_time	 varchar(50),
 	seller_last_login_ip	 varchar(20),
 	seller_credit			 int,
 	seller_good_evaluation_num	int,
